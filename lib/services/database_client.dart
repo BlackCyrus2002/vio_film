@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:vio_film/model/favorites_model.dart';
 
+import '../model/user_model.dart';
+
 class DataBaseClient {
   Database? _database;
 
@@ -29,6 +31,16 @@ class DataBaseClient {
     state INTEGER NOT NULL
     )
     ''');
+
+    await database.execute('''
+    CREATE TABLE users (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    number TEXT NOT NULL,
+    email TEXT NOT NULL,
+    image TEXT
+    )
+    ''');
   }
 
   Future<bool> addFavorite(int typeID, String type) async {
@@ -46,7 +58,7 @@ class DataBaseClient {
       await db.insert('favorites', {
         "typeID": typeID,
         "type": type,
-        'state': 1
+        'state': 1,
       });
     }
     return true;
@@ -69,5 +81,52 @@ class DataBaseClient {
     const query = "SELECT * FROM favorites";
     List<Map<String, dynamic>> mapList = await db.rawQuery(query);
     return mapList.map((element) => Favorites.fromMap(element)).toList();
+  }
+
+  //Gestion de l'utilisateur
+
+  Future<List<UserModel>> takeUser() async {
+    Database db = await database;
+    List<Map<String, dynamic>> userMaps = await db.query('users');
+    return userMaps.map((user) => UserModel.fromMap(user)).toList();
+  }
+
+  Future<bool> addUser(
+    String name,
+    String number,
+    String email,
+    String? image,
+  ) async {
+    Database db = await database;
+    await db.insert('users', {
+      'name': name,
+      'number': number,
+      'email': email,
+      'image': image,
+    });
+    return true;
+  }
+
+  Future<UserModel> oneUser() async {
+    Database db = await database;
+    List<Map<String, dynamic>> userMaps = await db.query('users');
+    return UserModel.fromMap(userMaps.first);
+  }
+
+  Future<bool> updateUser(
+      int id,
+    String name,
+    String number,
+    String email,
+    String? image,
+  ) async {
+    Database db = await database;
+    await db.update(
+      "users",
+      {"name": name, "number": number, "email": email, "image": image},
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    return true;
   }
 }

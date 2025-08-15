@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vio_film/provider/share.dart';
 import 'package:vio_film/provider/theme_provider.dart';
+import 'package:vio_film/provider/user_provider.dart';
 import 'package:vio_film/view/home_page.dart';
 
 void main() {
@@ -9,7 +10,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => ShareProvider())
+        ChangeNotifierProvider(create: (_) => ShareProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider())
       ],
       child: const MyApp(),
     ),

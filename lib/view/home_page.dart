@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:vio_film/services/database_client.dart';
+import 'package:vio_film/view/pages/signup/signup.dart';
 import 'package:vio_film/view/widget/my_drawer.dart';
 
 import '../datas/navbar_datas.dart';
 import '../datas/pages_datas.dart';
+import '../model/user_model.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -19,9 +22,18 @@ class _MyHomePageState extends State<MyHomePage> {
   List navBar = NavbarDatas().tabBarElements;
   List pages = PagesDatas().pages;
   int currentIndex = 0;
+  List<UserModel> users = [];
+
+  @override
+  void initState() {
+    getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (users.isEmpty) return Signup();
+
     return Scaffold(
       drawer: MyDrawer(),
       appBar: AppBar(
@@ -57,5 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  getUser() async {
+    users = await DataBaseClient().takeUser();
+    setState(() {});
   }
 }
