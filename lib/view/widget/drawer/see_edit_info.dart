@@ -7,6 +7,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vio_film/model/user_model.dart';
 import 'package:vio_film/services/database_client.dart';
+import 'package:vio_film/view/pages/signup/signup.dart';
 
 class SeeEditInfo extends StatefulWidget {
   const SeeEditInfo({super.key, required this.user});
@@ -24,7 +25,6 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
   String username = "";
   String? image;
   UserModel? updatedUser;
-
 
   @override
   void initState() {
@@ -123,11 +123,15 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: (()=> getImage(ImageSource.camera)),
-                      icon: Icon(Icons.camera_alt, size: 30,color: Colors.black),
+                      onPressed: (() => getImage(ImageSource.camera)),
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                        color: Colors.black,
+                      ),
                     ),
                     IconButton(
-                      onPressed: (()=> getImage(ImageSource.gallery)),
+                      onPressed: (() => getImage(ImageSource.gallery)),
                       icon: Icon(
                         Icons.photo_library,
                         size: 30,
@@ -156,7 +160,7 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: Icon(Icons.person, ),
+                    prefixIcon: Icon(Icons.person),
                   ),
                   onTap: () {
                     username = nameController!.text;
@@ -194,10 +198,30 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    prefixIcon: Icon(
-                      Icons.alternate_email,
-                    ),
+                    prefixIcon: Icon(Icons.alternate_email),
                   ),
+                ),
+                SizedBox(height: 30),
+                Divider(thickness: 2),
+                SizedBox(height: 10),
+                Text(
+                  "Supprimer mon compte",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: (() => deleteUser(widget.user.id)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    foregroundColor: Colors.white
+                  ),
+                  child: Text("Supprimer mon compte"),
                 ),
               ],
             ),
@@ -237,11 +261,14 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => SeeEditInfo(user: userUpdate), // si tu récupères les nouvelles infos
+          builder: (context) => SeeEditInfo(
+            user: userUpdate,
+          ), // si tu récupères les nouvelles infos
         ),
       );
     });
   }
+
   getImage(ImageSource source) async {
     XFile? imageSource = await ImagePicker().pickImage(source: source);
     if (imageSource == null) return;
@@ -253,6 +280,21 @@ class _SeeEditInfoState extends State<SeeEditInfo> {
         numberController!.text,
         emailController!.text,
         image,
+      );
+    });
+  }
+
+  deleteUser(int id) async {
+    await DataBaseClient().deleteUser(id).then((success) {
+      const snackBar = SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Vous avez supprimé votre compte!'),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Signup()),
+          (Route<dynamic> route) => false
       );
     });
   }

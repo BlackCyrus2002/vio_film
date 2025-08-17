@@ -129,4 +129,10 @@ class DataBaseClient {
     );
     return true;
   }
+
+  Future<bool> deleteUser(int id) async {
+    Database db = await database;
+    await db.delete("users", where:"id = ?" , whereArgs: [id]);
+    return true;
+  }
 }
