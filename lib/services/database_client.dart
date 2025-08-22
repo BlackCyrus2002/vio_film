@@ -38,6 +38,7 @@ class DataBaseClient {
     name TEXT NOT NULL,
     number TEXT NOT NULL,
     email TEXT NOT NULL,
+    password TEXT,
     image TEXT
     )
     ''');
@@ -96,6 +97,7 @@ class DataBaseClient {
     String number,
     String email,
     String? image,
+    String password,
   ) async {
     Database db = await database;
     await db.insert('users', {
@@ -103,6 +105,7 @@ class DataBaseClient {
       'number': number,
       'email': email,
       'image': image,
+      'password': password,
     });
     return true;
   }
@@ -114,7 +117,7 @@ class DataBaseClient {
   }
 
   Future<bool> updateUser(
-      int id,
+    int id,
     String name,
     String number,
     String email,
@@ -123,7 +126,12 @@ class DataBaseClient {
     Database db = await database;
     await db.update(
       "users",
-      {"name": name, "number": number, "email": email, "image": image},
+      {
+        "name": name,
+        "number": number,
+        "email": email,
+        "image": image,
+      },
       where: "id = ?",
       whereArgs: [id],
     );
@@ -132,7 +140,21 @@ class DataBaseClient {
 
   Future<bool> deleteUser(int id) async {
     Database db = await database;
-    await db.delete("users", where:"id = ?" , whereArgs: [id]);
+    await db.delete("users", where: "id = ?", whereArgs: [id]);
+    return true;
+  }
+
+  Future<bool> editPass(String email, String password)async{
+    Database db = await database;
+    await db.update(
+      "users",
+      {
+        "password": password,
+      },
+      where: "email = ?",
+      whereArgs: [email],
+
+    );
     return true;
   }
 }

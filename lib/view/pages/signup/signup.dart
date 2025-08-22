@@ -8,7 +8,6 @@ import 'package:vio_film/view/home_page.dart';
 
 import '../../../services/database_client.dart';
 
-
 class Signup extends StatefulWidget {
   const Signup({super.key});
 
@@ -20,6 +19,9 @@ class _SignupState extends State<Signup> {
   TextEditingController? nameController;
   TextEditingController? numberController;
   TextEditingController? emailController;
+  TextEditingController? passwordController;
+  bool passwordVisible = false;
+  final _formKey = GlobalKey<FormState>();
 
   String? image;
 
@@ -28,6 +30,7 @@ class _SignupState extends State<Signup> {
     nameController = TextEditingController();
     numberController = TextEditingController();
     emailController = TextEditingController();
+    passwordController = TextEditingController();
     super.initState();
   }
 
@@ -36,13 +39,14 @@ class _SignupState extends State<Signup> {
     nameController!.dispose();
     numberController!.dispose();
     emailController!.dispose();
+    passwordController!.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Colors.blue.shade200),
+      appBar: AppBar(backgroundColor: Colors.orange.shade300),
       body: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -52,13 +56,9 @@ class _SignupState extends State<Signup> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Colors.blue.shade200,
-                Colors.orange.shade300,
-              ],
-            )
+              colors: [Colors.orange.shade300, Colors.blue.shade200],
+            ),
           ),
-          padding: EdgeInsets.only(top: 50),
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             padding: EdgeInsets.all(30),
@@ -76,55 +76,106 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
                 SizedBox(height: 30),
-                TextField(
-                  style: GoogleFonts.poppins(),
-                  controller: nameController,
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                    labelText: "Nom complet",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    prefixIcon: Icon(Icons.person,color: Colors.black),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        style: GoogleFonts.poppins(),
+                        controller: nameController,
+                        keyboardType: TextInputType.name,
+                        decoration: InputDecoration(
+                          labelText: "Nom complet",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: Icon(Icons.person, color: Colors.black),
+                        ),
+                        validator: (value) {
+                          if (value == null || nameController!.text.isEmpty) {
+                            return 'Veuillez entrer votre nom complet';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: Icon(
+                            Icons.alternate_email,
+                            color: Colors.black,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || emailController!.text.isEmpty) {
+                            return 'Votre email est obligatoire';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      TextFormField(
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: !passwordVisible,
+                        decoration: InputDecoration(
+                          labelText: "Mot de passe",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          prefixIcon: Icon(Icons.password, color: Colors.black),
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                            },
+                            icon: (passwordVisible)
+                                ?Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility, color: Colors.black),
+                            color: Colors.black,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null ||
+                              passwordController!.text.isEmpty) {
+                            return 'Veuillez entrer un mot de passe';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 10),
+                      IntlPhoneField(
+                        languageCode: "Fr",
+                        searchText: "Rechercher un pays",
+                        controller: numberController,
+                        validator: (value) {
+                          if (value == null || numberController!.text.isEmpty) {
+                            return 'Veuillez entrer votre numéro de téléphone';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                        initialCountryCode: "CI",
+                        decoration: InputDecoration(
+                          labelText: 'Numéro de téléphone',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 10),
-                IntlPhoneField(
-                  languageCode: "Fr",
-                  searchText: "Rechercher un pays",
-                  controller: numberController,
-                  validator: (value) {
-                    if (value == null || numberController!.text.isEmpty) {
-                      return 'Veuillez entrer votre numéro de téléphone';
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    setState(() {});
-                  },
-                  initialCountryCode: "CI",
-                  decoration: InputDecoration(
-                    labelText: 'Numéro de téléphone',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    prefixIcon: Icon(Icons.alternate_email,color: Colors.black),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                SizedBox(height: 30),
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 70,
@@ -136,10 +187,11 @@ class _SignupState extends State<Signup> {
                       color: Colors.white,
                       image: image != null
                           ? DecorationImage(
-                              image: FileImage(File(image!)), fit: BoxFit.cover)
+                              image: FileImage(File(image!)),
+                              fit: BoxFit.cover,
+                            )
                           : null,
                     ),
-
                   ),
                 ),
                 SizedBox(height: 10),
@@ -147,11 +199,15 @@ class _SignupState extends State<Signup> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     IconButton(
-                      onPressed: (()=> getImage(ImageSource.camera)),
-                      icon: Icon(Icons.camera_alt, size: 30,color: Colors.black),
+                      onPressed: (() => getImage(ImageSource.camera)),
+                      icon: Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                        color: Colors.black,
+                      ),
                     ),
                     IconButton(
-                      onPressed: (()=> getImage(ImageSource.gallery)),
+                      onPressed: (() => getImage(ImageSource.gallery)),
                       icon: Icon(
                         Icons.photo_library,
                         size: 30,
@@ -160,15 +216,22 @@ class _SignupState extends State<Signup> {
                     ),
                   ],
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 15),
                 ElevatedButton(
-                  onPressed: (()=> addUser(nameController!.text,numberController!.text,emailController!.text)),
+                  onPressed: (() {
+                    if (_formKey.currentState!.validate()) {
+                      addUser(
+                        nameController!.text,
+                        numberController!.text,
+                        emailController!.text,
+                        passwordController!.text,
+                      );
+                    }
+                  }),
                   style: ElevatedButton.styleFrom(
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.blue.shade200,
+                    textStyle: TextStyle(fontWeight: FontWeight.bold),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue.shade600,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                     ),
@@ -191,9 +254,14 @@ class _SignupState extends State<Signup> {
     });
   }
 
-  addUser(String name, String number, String email)async{
-    await DataBaseClient().addUser(name, number, email, image).then((success) {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage(title: "Vio Film")));
+  addUser(String name, String number, String email, String password) async {
+    await DataBaseClient().addUser(name, number, email, image, password).then((
+      success,
+    ) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyHomePage(title: "Vio Film")),
+      );
     });
   }
 }

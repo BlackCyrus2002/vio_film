@@ -67,7 +67,7 @@ class _MovieState extends State<Movie> {
               itemBuilder: (context, index) {
                 final movie = categoryModel!.results[index];
                 return Card(
-                  elevation: 7,
+                  elevation: 5,
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
@@ -75,15 +75,29 @@ class _MovieState extends State<Movie> {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width * 0.35,
-                            height: MediaQuery.of(context).size.height * 0.2,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: CachedNetworkImageProvider(
-                                  "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (builder) {
+                                    return DescriptionMovie(
+                                      movie: movie,
+                                    );
+                                  },
                                 ),
-                                fit: BoxFit.cover,
+                              );
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.35,
+                              height: MediaQuery.of(context).size.height * 0.2,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                    "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),

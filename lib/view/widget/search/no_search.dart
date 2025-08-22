@@ -23,75 +23,75 @@ class NoSearch extends StatelessWidget {
         children: list!.results.map((e) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: Card(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: CachedNetworkImageProvider(
-                      "https://image.tmdb.org/t/p/w500${e.poster_path}",
-                    ),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withValues(alpha: 0.5),
-                      BlendMode.darken,
-                    ),
+            child: InkWell(
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (builder) {
+                      return DescriptionMovie(
+                        movie: e,
+                      );
+                    },
                   ),
+                );
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        "${e.name} ${e.title}",
-                        style: GoogleFonts.poppins(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                clipBehavior: Clip.antiAlias,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        "https://image.tmdb.org/t/p/w500${e.poster_path}",
+                      ),
+                      fit: BoxFit.contain,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withValues(alpha: 0.5),
+                        BlendMode.darken,
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (builder) {
-                                  return DescriptionMovie(
-                                    movie: e,
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.read_more_outlined,
-                            color: Colors.blue.shade400,
-                            size: 30,
+                    color: Colors.black,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          "${e.name} ${e.title}",
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(width: 10),
-                        IconButton(
-                          onPressed: (()=>bottomSheet(e)),
-                          icon: Icon(
-                            Icons.movie_creation,
-                            color: Colors.orange.shade400,
-                            size: 26,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 10),
+                          IconButton(
+                            onPressed: (()=>bottomSheet(e)),
+                            icon: Icon(
+                              Icons.movie_creation,
+                              color: Colors.orange.shade400,
+                              size: 26,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                  ],
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ),
-            ),
+            )
           );
         }).toList(),
       ),

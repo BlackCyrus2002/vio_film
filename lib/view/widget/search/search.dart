@@ -26,6 +26,7 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
+    update();
     super.initState();
     _controller = TextEditingController();
     callAPI();

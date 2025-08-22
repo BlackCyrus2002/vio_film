@@ -31,7 +31,6 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
   @override
   Widget build(BuildContext context) {
     final movie = widget.movie;
-
     return Scaffold(
       backgroundColor: Colors.grey[900],
       floatingActionButton: FloatingActionButton(
@@ -43,7 +42,7 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
         children: [
           // Backdrop Image with overlay
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.45,
+            height: MediaQuery.of(context).size.height * 0.5,
             width: double.infinity,
             child: Stack(
               fit: StackFit.expand,
@@ -65,7 +64,7 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
                 ),
                 Positioned(
                   left: 16,
-                  bottom: 16,
+                  bottom: 50,
                   right: 16,
                   child: Text(
                     "${movie.title}${movie.name}",
@@ -105,7 +104,6 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Infos clés
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

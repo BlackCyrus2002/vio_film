@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vio_film/model/drawer_model.dart';
 import 'package:vio_film/model/user_model.dart';
-import 'package:vio_film/view/widget/drawer/see_edit_info.dart';
+import 'package:vio_film/view/pages/profil/see_edit_info.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/user_provider.dart';

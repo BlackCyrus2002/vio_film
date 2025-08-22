@@ -4,6 +4,7 @@ class UserModel {
   String number;
   String email;
   String? image;
+  String password;
 
   UserModel({
     required this.id,
@@ -11,6 +12,7 @@ class UserModel {
     required this.number,
     required this.email,
     required this.image,
+    required this.password,
   });
 
   UserModel.fromMap(Map<String, dynamic> map)
@@ -18,5 +20,6 @@ class UserModel {
       name = map['name'],
       number = map['number'],
       email = map['email'],
-      image = map['image'];
+      image = map['image'],
+      password = map['password'];
 }
