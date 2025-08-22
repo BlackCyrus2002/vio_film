@@ -71,50 +71,135 @@ class _SearchState extends State<Search> {
                 addTitle(value);
               },
             ),
-            (movie_title.isEmpty)
-                ? Container()
-                : (isSearch)?Container():Container(
-              margin: EdgeInsets.only(top: 20),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              height: 200,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Mes recherches",
-                    style: GoogleFonts.poppins(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: movie_title.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(movie_title[index]),
-                          trailing: IconButton(
-                            onPressed: (()=>removeTitle(movie_title[index])),
-                            icon: Icon(Icons.highlight_remove),
+            SizedBox(height: 10),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    (movie_title.isEmpty)
+                        ? Container()
+                        : (isSearch)
+                        ? Container()
+                        : Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Mes recherches",
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                          onTap: (){
-                            setState(() {
-                              _controller.text = movie_title[index];
-                              isSearch = true;
-                              search(_controller.text);
-                            });
-                          },
-                        );
-                      },
+                          SizedBox(height: 10),
+                          GridView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 2,
+                              crossAxisSpacing: 8,
+                              childAspectRatio: 4,
+                            ),
+                            itemCount: movie_title.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(movie_title[index]),
+                                trailing: IconButton(
+                                  onPressed: (() =>
+                                      removeTitle(movie_title[index])),
+                                  icon: Icon(Icons.highlight_remove),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    _controller.text = movie_title[index];
+                                    isSearch = true;
+                                    search(_controller.text);
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(height: 10),
+                    Text(
+                      "Nos films et séries",
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    isSearch
+                        ? SearchResult(results: results, bottomSheet: bottomSheet)
+                        : NoSearch(list: list, bottomSheet: bottomSheet),
+                  ],
+                )
               ),
             ),
+            /* (movie_title.isEmpty)
+                ? Container()
+                : (isSearch)
+                ? Container()
+                : Expanded(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Mes recherches",
+                            style: GoogleFonts.poppins(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Expanded(
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 2,
+                                    crossAxisSpacing: 8,
+                                    childAspectRatio: 4,
+                                  ),
+                              itemCount: movie_title.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text(movie_title[index]),
+                                  trailing: IconButton(
+                                    onPressed: (() =>
+                                        removeTitle(movie_title[index])),
+                                    icon: Icon(Icons.highlight_remove),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      _controller.text = movie_title[index];
+                                      isSearch = true;
+                                      search(_controller.text);
+                                    });
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
             SizedBox(height: 10),
             Text(
               "Nos films et séries",
@@ -126,7 +211,7 @@ class _SearchState extends State<Search> {
             SizedBox(height: 10),
             isSearch
                 ? SearchResult(results: results, bottomSheet: bottomSheet)
-                : NoSearch(list: list, bottomSheet: bottomSheet),
+                : NoSearch(list: list, bottomSheet: bottomSheet), */
           ],
         ),
       ),
