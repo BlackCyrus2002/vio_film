@@ -2,11 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:vio_film/model/user_model.dart';
 import 'package:vio_film/provider/user_provider.dart';
-import 'package:vio_film/services/database_client.dart';
 import 'package:provider/provider.dart';
 import 'package:vio_film/view/widget/home/loading_drawer.dart';
 import '../../datas/drawer_data.dart';
@@ -36,13 +34,14 @@ class _MyDrawerState extends State<MyDrawer> {
     }
     List<DrawerModel> drawerElements = DrawerData().drawerElements(user!);
     return Drawer(
-      child: Column(
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
           Stack(
             alignment: Alignment.topCenter,
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: MediaQuery.of(context).size.height * 0.22,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/vio_film.png"),
@@ -56,7 +55,7 @@ class _MyDrawerState extends State<MyDrawer> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height * 0.16,
+                  top: MediaQuery.of(context).size.height * 0.135,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
@@ -70,7 +69,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     ],
                   ),
                   child: CircleAvatar(
-                    radius: 70,
+                    radius: 65,
                     backgroundColor: Colors.white,
                     child: Container(
                       padding: EdgeInsets.all(5),
@@ -78,14 +77,14 @@ class _MyDrawerState extends State<MyDrawer> {
                           ? Skeletonizer(
                               enabled: true,
                               child: CircleAvatar(
-                                radius: 68,
+                                radius: 60,
                                 backgroundImage: AssetImage(
                                   "assets/vio_film.png",
                                 ),
                               ),
                             )
                           : CircleAvatar(
-                              radius: 68,
+                              radius: 60,
                               backgroundImage: FileImage(File(user!.image!)),
                             ),
                     ),
@@ -95,54 +94,54 @@ class _MyDrawerState extends State<MyDrawer> {
             ],
           ),
           SizedBox(height: 10),
-          Text(
-            (user == null) ? "Nom complet" : user!.name,
-            maxLines: 1,
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+          Center(
+            child: Text(
+              (user == null) ? "Nom complet" : user!.name,
+              maxLines: 1,
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          Text(
-            (user == null) ? "Email" : user!.email,
-            maxLines: 1,
-            style: GoogleFonts.poppins(),
+          Center(
+            child: Text(
+              (user == null) ? "Email" : user!.email,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(),
+            ),
           ),
           Divider(),
-          Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            drawerElements[index].widget,
-                      ),
-                    );
-                  },
-                  leading: Icon(drawerElements[index].leading),
-                  title: Text(
-                    drawerElements[index].title,
-                    maxLines: 1,
-                    style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
-                  ),
-                  trailing: Icon(
-                    drawerElements[index].trailing,
-                    color: Colors.orange,
-                  ),
-                  subtitle: Text(
-                    drawerElements[index].subTitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+          ...drawerElements.map((drawerElements){
+            return ListTile(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    drawerElements.widget,
                   ),
                 );
               },
-              separatorBuilder: (context, index) => Divider(),
-              itemCount: drawerElements.length,
-            ),
-          ),
+              leading: Icon(drawerElements.leading),
+              title: Text(
+                drawerElements.title,
+                maxLines: 1,
+                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              trailing: Icon(
+                drawerElements.trailing,
+                color: Colors.orange,
+              ),
+              subtitle: Text(
+                drawerElements.subTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14),
+              ),
+            );
+          })
         ],
       ),
     );

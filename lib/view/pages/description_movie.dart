@@ -43,7 +43,6 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
           // Backdrop Image with overlay
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.5,
-            width: double.infinity,
             child: Stack(
               fit: StackFit.expand,
               children: [
@@ -56,7 +55,7 @@ class _DescriptionMovieState extends State<DescriptionMovie> {
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
-                      colors: [Colors.transparent, Colors.black87],
+                      colors: [Colors.transparent, Colors.black],
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),

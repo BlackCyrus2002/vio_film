@@ -48,7 +48,7 @@ class DrawerData{
       leading: Icons.support_agent,
       trailing: Icons.arrow_forward_ios,
       title: "Aide et support",
-      subTitle: "Version , API utilisée",
+      subTitle: "Contacter l'équipe",
       widget: Container(),
     ),
   ];
